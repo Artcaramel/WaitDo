@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.QnaDaoImple">
+	<resultMap type="qnadto" id="qnaResultMap">
+		<id column="QSEQ" property="qseq" />
+		<result column="SUBJECT" property="subject" />
+		<result column="CONTENT" property="content" />    <!-- javaType="java.sql.Date" -->
+		<result column="RESUBJECT" property="resubject" />
+		<result column="REPLY" property="reply" />
+		<result column="ID" property="id" />
+		<result column="REID" property="reid" />
+		<result column="INDATE" property="indate" />
+		<result column="MODDATE" property="moddate" />
+	</resultMap>
+	<insert id="insert" parameterType="qnadto">
+		INSERT INTO
+		QNA(ID,SUBJECT,CONTENT,INDATE,MODDATE)
+		VALUES
+		(#{id},#{subject},#{content},now(),now())
+	</insert>
+
+	<select id="selectList" parameterType="String"
+		resultMap="qnaResultMap">
+		SELECT *
+		FROM QNA
+		WHERE ID=#{value}
+	</select>
+	
+	<select id="qnaReplyList" parameterType="int"
+		resultMap="qnaResultMap">
+		SELECT *
+		FROM QNA
+		WHERE qseq=#{value}
+	</select>
+	
+
+	<select id="adminQnaList" resultMap="qnaResultMap">
+		SELECT * FROM QNA
+	</select>
+
+	<delete id="qnaDelete" parameterType="int">
+		DELETE FROM QNA WHERE QSEQ=#{qseq}
+	</delete>
+
+	<update id="qnaRelpy" parameterType="qnadto">
+		UPDATE QNA SET
+		REID=#{reid}, RESUBJECT=#{resubject}, REPLY=#{reply}
+		WHERE
+		QSEQ=#{qseq}
+	</update>
+</mapper>

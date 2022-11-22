@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 매퍼 (Mapper) 부분 -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.ProductDaoImple">
+	<resultMap type="productdto" id="productResultMap">
+		<id column="PSEQ" property="pseq" />
+		<result column="NAME" property="name" />
+		<result column="KIND" property="kind" />
+		<result column="SUBCATEGORY" property="subcategory" />
+		<result column="PRICE1" property="price1" />
+		<result column="PRICE2" property="price2" />
+		<result column="CONTENT" property="content" />
+		<result column="COLOR" property="color" />
+		<result column="SIZE" property="size" />
+		<result column="IMAGE" property="image" />
+		<result column="IMAGE_DETAIL" property="image_detail" />
+		<result column="IMAGE_DETAIL2" property="image_detail2" />
+		<result column="IMAGE_DETAIL3" property="image_detail3" />
+		<result column="IMAGE_DETAIL4" property="image_detail4" />
+		<result column="ACTIVEYN" property="activeyn" />
+		<result column="LIKECOUNT" property="likecount" />
+		<result column="INDATE" property="indate" />
+		<result column="SEARCHNAME" property="searchName"/>
+	</resultMap>
+	
+	<select id="searchList" resultMap="productResultMap">
+		SELECT * FROM PRODUCT WHERE NAME LIKE '%'||#{searchName}||'%' 	
+	</select>
+
+	<select id="selectList" resultMap="productResultMap">
+		SELECT PSEQ, NAME, KIND, PRICE2, CONTENT, IMAGE, INDATE FROM PRODUCT
+	</select>
+	<select id="listKindProduct" parameterType="String"
+		resultMap="productResultMap">
+		SELECT PSEQ, NAME, KIND, PRICE2, IMAGE
+		FROM PRODUCT WHERE KIND=#{value}
+	</select>
+	<select id="subcategoryProduct" parameterType="String"
+		resultMap="productResultMap">
+		SELECT PSEQ, NAME, subcategory, PRICE2, IMAGE
+		FROM PRODUCT WHERE subcategory=#{value}
+	</select>
+	<select id="subcategory" parameterType="hashmap"
+		resultMap="productResultMap">
+		SELECT PSEQ, NAME, subcategory, PRICE2, IMAGE
+		FROM PRODUCT WHERE KIND=#{value} and subcategory=#{value}
+	</select>
+	<select id="productDetailList" parameterType="String"
+		resultMap="productResultMap">
+		SELECT PSEQ, NAME, PRICE2, COLOR, SIZE, IMAGE, IMAGE_DETAIL,
+		IMAGE_DETAIL2, IMAGE_DETAIL3, IMAGE_DETAIL4, CONTENT, INDATE FROM
+		PRODUCT WHERE PSEQ=#{pseq}
+		<!-- SELECT PSEQ,NAME,KIND,PRICE2,CONTENT,OPTION,IMAGE,IMAGE_DETAIL,MAGE_DETAIL2, 
+			IMAGE_DETAIL3,IMAGE_DETAIL4,LIKECOUNT,INDATE FROM PRODUCT WHERE PSEQ=#{value} -->
+	</select>
+	<!-- 상품등록하기 <insert id="insert" parameterType="productdto"> INSERT INTO 
+		PRODUCT(NAME,KIND,PRICE1,PRICE2,CONTENT,IMAGE,INDATE) VALUES (#{name},#{kind},#{price1},#{price2},#{content},#{img},#{activeyn},#{likecount},now()) 
+		</insert> -->
+</mapper> 

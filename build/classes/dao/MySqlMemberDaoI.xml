@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 매퍼 (Mapper) 부분 -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.MemberDaoImple">
+	<resultMap type="memberdto" id="memberResultMap">
+		<id column="MNO" property="mno" />
+		<result column="NAME" property="name" />
+		<result column="BIRTH" property="birth" />    <!-- javaType="java.sql.Date" -->
+		<result column="EMAIL" property="email" />
+		<result column="PWD" property="pwd" />
+		<result column="PHONE" property="phone" />
+		<result column="INDATE" property="indate" />
+		<result column="USEYN" property="useyn" />
+		<result column="ADMINYN" property="adminyn" />
+	</resultMap>
+	
+	<select id="selectList" resultMap="memberResultMap">
+		SELECT * FROM MEMBER
+	</select>
+	
+	<select id="selectOne" parameterType="int"
+		resultMap="memberResultMap">
+		SELECT MNO,NAME,BIRTH,EMAIL,PWD,PHONE,INDATE
+		FROM MEMBER
+		WHERE MNO=#{value}
+	</select>
+	
+	<!-- <select id="selectAddress" parameterType="int"
+		resultMap="memberResultMap">
+		SELECT ZIPCODE,ADDRESS1,ADDRESS2
+		FROM MEMBER
+		WHERE MNO=#{value}
+	</select> -->
+	
+	<select id="selectFindEmail" parameterType="memberdto"
+	 resultMap="memberResultMap">
+		SELECT *
+		FROM MEMBER WHERE
+		NAME=#{name} AND BIRTH=#{birth}
+	</select>
+	
+	<select id="selectFindPwd" parameterType="memberdto"
+	 resultMap="memberResultMap">
+		SELECT *
+		FROM MEMBER WHERE
+		EMAIL=#{email} AND NAME=#{name} AND BIRTH=#{birth}
+	</select>
+	
+	<select id="select" parameterType="memberdto"
+		resultMap="memberResultMap">
+		SELECT *
+		FROM MEMBER WHERE
+		EMAIL=#{email} AND PWD=#{pwd}
+	</select>
+	
+	
+	
+
+	<select id="idcheck" parameterType="String"
+		resultMap="memberResultMap">
+		SELECT EMAIL, PWD, NAME, PHONE, BIRTH FROM MEMBER WHERE
+		EMAIL=#{email}
+	</select>
+
+	<insert id="insert" parameterType="memberdto">
+		INSERT INTO
+		MEMBER(NAME,BIRTH,EMAIL,PWD,PHONE,INDATE)
+		VALUES
+		(#{name},#{birth},#{email},#{pwd},#{phone},now())
+	</insert>
+
+	<!-- <update id="addressAdd" parameterType="memberdto">
+		UPDATE MEMBER SET
+		ZIPCODE=#{zipcode}, ADDRESS1=#{address1}, ADDRESS2=#{address2}
+		WHERE
+		MNO=#{mno}
+	</update> -->
+	
+	<!-- <update id="addressDelete" parameterType="memberdto">
+		UPDATE MEMBER SET address1 = NOT NULL, address2 = NOT NULL , ZIPCODE = NOT NULL
+		WHERE MNO=#{mno}
+	</update> -->
+
+	<update id="updateEmail" parameterType="memberdto">
+		UPDATE MEMBER SET
+		EMAIL=#{email},INDATE=now()
+		WHERE MNO=#{mno}
+	</update>
+	
+	<update id="updatePwd" parameterType="memberdto">
+		UPDATE MEMBER SET
+		PWD=#{pwd},INDATE=now()
+		WHERE MNO=#{mno}
+	</update>
+
+	<update id="delete" parameterType="memberdto">
+		UPDATE MEMBER SET useyn ='n'
+		WHERE MNO=#{mno}
+	</update>
+	
+	<delete id="adminDelete" parameterType="int">
+    DELETE FROM MEMBER WHERE MNO=#{mno}
+  	</delete> 
+
+</mapper> 

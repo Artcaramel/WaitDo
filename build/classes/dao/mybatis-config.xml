@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="dao/db.properties"/>  
+  <typeAliases>    
+    <typeAlias type="dto.MemberDto" alias="memberdto"/>
+    <typeAlias type="dto.ProductDto" alias="productdto"/>
+    <typeAlias type="dto.CartDto" alias="cartdto"/>
+    <typeAlias type="dto.OrderDto" alias="orderdto"/> 
+    <typeAlias type="dto.QnaDto" alias="qnadto"/> 
+    <typeAlias type="dto.AddressDto" alias="addressdto"/>
+ <!--    <typeAlias type="dto.PaymentDto" alias="paymentdto"/> --> 
+ <!--   <typeAlias type="dto.ReviewDto" alias="reviewdto"/>  --> 
+  </typeAliases>  
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="dao/MySqlMemberDaoI.xml"/>
+    <mapper resource="dao/MySqlProductDao.xml"/>
+    <mapper resource="dao/MySqlCartDaoI.xml"/>
+    <mapper resource="dao/MySqlOrderDao.xml"/>
+    <mapper resource="dao/MySqlQnaDaoI.xml"/>
+    <mapper resource="dao/MySqlAddressDaoI.xml"/>
+ <!--   <mapper resource="dao/MySqlPaymentDaoI.xml"/>--> 
+  </mappers>
+</configuration> 

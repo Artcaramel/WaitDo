@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 매퍼 (Mapper) 부분  -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.CartDaoImple">
+  <resultMap type="cartdto" id="cartResultMap">
+  	<id column="CSEQ" property="cseq"/>
+    <result column="ID"   property="id"/> <!-- 이메일 또는 네임으로 변경 필요 -->
+    <result column="PSEQ" property="pseq"/>
+    <result column="PNAME" property="pname"/> 
+    <result column="MNAME" property="mname"/>
+   	<result column="IMAGE" property="image"/>
+   	<result column="COLOR" property="color"/>
+   	<result column="SIZE" property="size"/>
+    <result column="PRICE2" property="price2"/>  
+    <result column="QUANTITY" property="quantity"/>
+    <result column="RESULT"   property="result"/>
+    <result column="INDATE" property="indate" />
+  </resultMap>  
+
+  <insert id="insert" parameterType="hashmap"> <!-- 장바구니 담기 -->
+  	INSERT INTO CART(ID, PSEQ, QUANTITY)
+  	VALUES (#{id},#{pseq},#{quantity})
+  </insert>  
+  <update id="updateCartResult" parameterType="int">
+  	UPDATE CART SET	RESULT= '2'
+	WHERE CSEQ=#{cseq}
+  </update>
+  <!-- 장바구니 수정 -->
+  <update id="modifyCart" parameterType="int">
+  	UPDATE CART SET	QUANTITY=#{quantity}
+	WHERE ID=#{id}
+	AND PSEQ#{pseq}
+  </update>
+  <select id="listCartProduct" parameterType="String" resultMap="cartResultMap"><!-- 장바구니 리스트 -->
+    SELECT * FROM CART_VIEW WHERE ID=#{id} ORDER BY CSEQ DESC
+  </select>    
+  <!-- 장바구니 삭제 -->
+  <delete id="delete" parameterType="int"> 
+  	DELETE FROM CART WHERE CSEQ=#{cseq}
+  </delete>
+  <select id="selectOne" parameterType="cartdto" resultMap="cartResultMap">
+  	SELECT * FROM CART_VIEW WHERE ID=#{id} and PSEQ=#{pseq}
+  </select>   
+  <select id="select" parameterType="cartdto" resultMap="cartResultMap">
+  	SELECT CSEQ, ID, PSEQ, QUANTITY, INDATE
+    FROM CART
+  </select> 
+   <select id="cartCount" parameterType="String" resultType="int">
+  	SELECT COUNT(ID) FROM CART_VIEW WHERE ID=#{value}
+  </select> 
+  <!-- 장바구니에 동일한 상품 레코드 확인 -->
+  <select id="countCart" resultType="int">  
+    SELECT COUNT(*) FROM CART 
+    WHERE ID=#{id}
+    AND PSEQ=#{pseq}
+  </select> 
+  <!-- 장바구니에 동일한 상품이 존재하면 수정 -->
+  <!--  <update id="updateCart">  
+    UPDATE CART 
+    SET	QUANTITY = quantity + #{quantity}
+	WHERE ID=#{id}
+	AND PSEQ=#{pseq} 
+  </update>  -->
+   <update id="updateCart" parameterType="hashmap">  
+    UPDATE CART 
+    SET	QUANTITY =#{quantity}
+	WHERE ID=#{id}
+	AND PSEQ=#{pseq} 
+  </update>
+</mapper> 

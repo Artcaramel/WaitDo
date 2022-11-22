@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.AddressDaoImple">
+	<resultMap type="addressdto" id="addressResultMap">
+		<id column="MNO" property="mno" />
+		<result column="EMAIL" property="email" />
+		<result column="ZIPCODE" property="zipcode" />
+		<result column="ADDRESS1" property="address1" />
+		<result column="ADDRESS2" property="address2" />
+		<result column="INDATE" property="indate" />
+	</resultMap>
+	
+	<select id="selectAddress" parameterType="String"
+		resultMap="addressResultMap">
+		SELECT *
+		FROM ADDRESS
+		WHERE EMAIL=#{value}
+	</select>
+	
+	<insert id="addressAdd" parameterType="addressdto">
+		INSERT INTO
+		ADDRESS(EMAIL,ZIPCODE,ADDRESS1,ADDRESS2,INDATE)
+		VALUES
+		(#{email},#{zipcode},#{address1},#{address2},now())
+	</insert>
+	
+	<delete id="addressDelete" parameterType="int">
+    DELETE FROM ADDRESS WHERE MNO=#{mno}
+  	</delete> 
+  
+</mapper>

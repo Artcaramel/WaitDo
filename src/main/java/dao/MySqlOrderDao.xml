@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 매퍼 (Mapper) 부분  -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.OrderDaoImple">
+  <resultMap type="orderdto" id="orderResultMap">  
+ 	<id column="OSEQ" property="oseq"/>
+    <result column="ID"   property="id"/>
+    <result column="ODSEQ" property="odseq"/>
+    <result column="PSEQ" property="pseq"/>
+	<result column="INDATE" property="indate"/> 
+    <result column="PNAME" property="pname"/>
+    <result column="PRICE2" property="price2"/>
+    <result column="QUANTITY" property="quantity"/>
+   <!-- <result column="STATE" property="state"/>  -->
+    <result column="RESULT" property="result"/>
+    <result column="IMAGE" property="image"/>
+    <result column="ADDRESS1" property="address1"/>
+    <result column="ADDRESS2" property="address2"/> 
+ <!-- <result column="CARDNUM" property="cardnum"/>  -->
+    <result column="PHONE" property="phone"/>
+  	</resultMap>
+   
+   <insert id="insert" parameterType="String"> 
+	  INSERT INTO ORDERS(ID)
+	  VALUES (#{id})
+   </insert>
+   
+   <insert id="insertOrderDetail" parameterType="hashmap"> <!-- maxOseq 값으로.. -->
+	  INSERT INTO ORDER_DETAIL(oseq, pseq, quantity) 
+	  VALUES(#{oseq},#{pseq},#{quantity})
+   </insert>  
+      
+   <select id="selectMaxOseq" resultType="int"> <!-- maxOseq 값으로.. -->   
+	  <!-- select max(#{oseq})from orders  -->
+	  SELECT MAX(oseq) FROM ORDERS
+   </select>
+ 
+   <update id="updateCartResult" parameterType="int">
+  	UPDATE CART SET	RESULT= '2'
+	WHERE CSEQ=#{cseq}
+   </update>
+ 
+ <!-- order view -->
+   <select id="maxOseq" parameterType="int" resultMap="orderResultMap">
+      SELECT * FROM ORDER_VIEW WHERE OSEQ=#{oseq}
+   </select>
+   
+   <select id="MypageOrder" parameterType="String" resultMap="orderResultMap">
+      SELECT * FROM ORDER_VIEW WHERE ID=#{id} ORDER BY OSEQ DESC
+   </select>  
+   
+   <select id="MypageOrderDetail" parameterType="orderdto" resultMap="orderResultMap">
+      SELECT * FROM ORDER_VIEW WHERE OSEQ=#{oseq} ORDER BY OSEQ DESC
+   </select>  
+  
+   <delete id="delete" parameterType="orderdto"> 
+  	  DELETE FROM ORDERS WHERE OSEQ=#{oseq} 
+  </delete> 
+  
+  
+</mapper>
